@@ -22,13 +22,29 @@
   }
 }
 
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-/* Custom scrollbar for hadith content */
+/* WebOS TV Compatibility - Basic styles */
+* {
+  box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+/* Custom scrollbar for hadith content - WebOS compatible */
 .scrollbar-thin::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -46,4 +62,12 @@ body {
 
 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
   background: rgba(245, 158, 11, 0.7);
+}
+
+/* Fallback for browsers that don't support backdrop-filter */
+@supports not ((-webkit-backdrop-filter: blur(20px)) or (backdrop-filter: blur(20px))) {
+  .backdrop-blur-xl,
+  .backdrop-blur-2xl {
+    background-color: rgba(6, 78, 59, 0.95);
+  }
 }

@@ -202,20 +202,20 @@ function App() {
   };
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-gradient-to-br from-emerald-950 via-emerald-900 to-emerald-800 font-sans relative">
+    <div className="min-h-screen w-screen overflow-hidden bg-emerald-900 font-sans relative" style={{ background: 'linear-gradient(135deg, #064e3b 0%, #065f46 50%, #047857 100%)' }}>
       
       {/* Islamic Pattern Background - Premium Gold */}
       <div className="absolute inset-0 opacity-15">
         <div className="absolute top-0 left-0 w-full h-full" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M60 20L95 55L60 90L25 55L60 20Z' fill='none' stroke='%23FFD700' stroke-width='1.5'/%3E%3C/svg%3E")`,
-          backgroundSize: '140px 140px'
+          backgroundSize: '140px 140px',
+          backgroundRepeat: 'repeat'
         }}></div>
       </div>
 
-      {/* Ambient Light Orbs - Gold & Emerald */}
-      <div className="absolute top-0 right-0 w-[700px] h-[700px] bg-amber-500/20 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-emerald-600/20 rounded-full blur-3xl"></div>
-      <div className="absolute top-1/2 left-1/2 w-[500px] h-[500px] bg-amber-400/15 rounded-full blur-3xl transform -translate-x-1/2 -translate-y-1/2"></div>
+      {/* Ambient Light Orbs - Gold & Emerald - Simplified for WebOS */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-amber-500 rounded-full" style={{ opacity: 0.15, filter: 'blur(100px)' }}></div>
+      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-emerald-600 rounded-full" style={{ opacity: 0.15, filter: 'blur(100px)' }}></div>
 
       {/* Header */}
       <header className="relative h-[12vh] lg:h-[14vh] px-4 lg:px-8 pt-2 lg:pt-4 z-10">
@@ -237,7 +237,7 @@ function App() {
           </div>
 
           {/* Date and Time Card */}
-          <div className="bg-gradient-to-br from-emerald-900/90 to-emerald-950/90 backdrop-blur-2xl rounded-2xl lg:rounded-3xl px-4 lg:px-6 xl:px-8 py-2 lg:py-3 shadow-2xl border border-amber-500/50">
+          <div className="rounded-2xl lg:rounded-3xl px-4 lg:px-6 xl:px-8 py-2 lg:py-3 shadow-2xl border-2 border-amber-500" style={{ backgroundColor: 'rgba(6, 78, 59, 0.95)' }}>
             {isClient && currentTime ? (
               <>
                 <div 
@@ -276,18 +276,22 @@ function App() {
           {/* Section Label */}
           <div className="flex items-center gap-2 lg:gap-3 mb-2 lg:mb-3 flex-shrink-0">
             <div className="w-1 h-4 lg:h-5 bg-amber-500 rounded-full"></div>
-            <h2 className="text-[10px] sm:text-xs lg:text-sm font-medium tracking-[0.2em] text-amber-400 uppercase drop-shadow">
+            <h2 className="text-[10px] sm:text-xs lg:text-sm font-medium text-amber-400 uppercase" style={{ letterSpacing: '0.2em' }}>
               HADITS PILIHAN
             </h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-amber-500 to-transparent"></div>
+            <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, rgb(245, 158, 11), transparent)' }}></div>
             
             {/* Progress Indicator */}
             <div className="flex items-center gap-1 lg:gap-2">
               <span className="text-[9px] sm:text-[10px] lg:text-xs text-amber-300">Next in</span>
-              <div className="w-12 sm:w-16 lg:w-20 h-1.5 bg-emerald-800 rounded-full overflow-hidden">
+              <div className="w-12 sm:w-16 lg:w-20 h-2 bg-emerald-800 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-amber-500 to-amber-600 rounded-full transition-all duration-1000"
-                  style={{ width: `${(timeLeft / 15) * 100}%` }}
+                  className="h-full rounded-full"
+                  style={{ 
+                    width: `${(timeLeft / 15) * 100}%`,
+                    background: 'linear-gradient(to right, rgb(245, 158, 11), rgb(217, 119, 6))',
+                    transition: 'width 1s linear'
+                  }}
                 ></div>
               </div>
               <span className="text-[9px] sm:text-[10px] lg:text-xs text-amber-400 font-mono font-medium">{timeLeft}s</span>
@@ -295,24 +299,24 @@ function App() {
           </div>
 
           {/* Hadits Card */}
-          <div className="flex-1 bg-gradient-to-br from-emerald-900/80 to-emerald-950/80 backdrop-blur-xl rounded-2xl lg:rounded-[2rem] shadow-2xl border border-amber-500/50 overflow-hidden min-h-0">
+          <div className="flex-1 rounded-2xl lg:rounded-[2rem] shadow-2xl border-2 border-amber-500 overflow-hidden min-h-0" style={{ backgroundColor: 'rgba(6, 78, 59, 0.85)' }}>
             
             <div className="h-full flex flex-col">
               {/* Category Badge */}
               <div className="px-4 sm:px-6 lg:px-8 pt-4 lg:pt-6 flex-shrink-0">
                 {hadiths[currentHadithIndex] ? (
-                  <span className="inline-block px-3 sm:px-4 lg:px-5 py-1 sm:py-1.5 lg:py-2 bg-gradient-to-r from-amber-500 to-amber-600 rounded-full text-amber-50 text-[10px] sm:text-xs lg:text-sm font-semibold tracking-wide shadow-xl border border-amber-400">
+                  <span className="inline-block px-3 sm:px-4 lg:px-5 py-1 sm:py-1.5 lg:py-2 rounded-full text-amber-50 text-[10px] sm:text-xs lg:text-sm font-semibold shadow-xl border-2 border-amber-400" style={{ backgroundColor: 'rgb(245, 158, 11)' }}>
                     {hadiths[currentHadithIndex].category.toUpperCase()}
                   </span>
                 ) : (
-                  <span className="inline-block px-3 sm:px-4 lg:px-5 py-1 sm:py-1.5 lg:py-2 bg-gradient-to-r from-amber-500 to-amber-600 rounded-full text-amber-50 text-[10px] sm:text-xs lg:text-sm font-semibold tracking-wide shadow-xl border border-amber-400">
+                  <span className="inline-block px-3 sm:px-4 lg:px-5 py-1 sm:py-1.5 lg:py-2 rounded-full text-amber-50 text-[10px] sm:text-xs lg:text-sm font-semibold shadow-xl border-2 border-amber-400" style={{ backgroundColor: 'rgb(245, 158, 11)' }}>
                     HADITS PILIHAN
                   </span>
                 )}
               </div>
 
               {/* Content */}
-              <div className="flex-1 px-4 sm:px-6 lg:px-8 py-4 lg:py-6 overflow-y-auto min-h-0 scrollbar-thin scrollbar-thumb-amber-500 scrollbar-track-emerald-800">
+              <div className="flex-1 px-4 sm:px-6 lg:px-8 py-4 lg:py-6 overflow-y-auto min-h-0">
                 {loadingHadiths || hadiths.length === 0 ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center">
@@ -324,13 +328,14 @@ function App() {
                   <>
                     {/* Arabic Text */}
                     <div className="text-right mb-4 lg:mb-6">
-                      <p className="text-amber-300 break-words drop-shadow-lg"
+                      <p className="text-amber-300 break-words"
                          style={{ 
                            fontFamily: "'Amiri', 'Traditional Arabic', serif",
                            direction: 'rtl',
-                           fontSize: 'clamp(1.8rem, 5vw, 3.5rem)',
+                           fontSize: '2.5rem',
                            lineHeight: '2',
-                           wordSpacing: '0.05em'
+                           wordSpacing: '0.05em',
+                           textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
                          }}>
                         {hadiths[currentHadithIndex].arabic}
                       </p>
@@ -338,14 +343,18 @@ function App() {
 
                     {/* Translation - Diperbesar tanpa bold */}
                     <div className="mb-4 lg:mb-6">
-                      <p className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl text-amber-200/90 leading-relaxed border-l-3 sm:border-l-4 border-amber-500 pl-3 sm:pl-4 lg:pl-5 italic font-normal">
+                      <p className="text-2xl sm:text-3xl lg:text-4xl text-amber-200 leading-relaxed italic font-normal"
+                         style={{ 
+                           borderLeft: '4px solid rgb(245, 158, 11)',
+                           paddingLeft: '1.25rem'
+                         }}>
                         "{hadiths[currentHadithIndex].translation}"
                       </p>
                     </div>
 
                     {/* Source & Pagination */}
                     <div className="mt-auto flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                      <span className="text-[10px] sm:text-xs lg:text-sm text-amber-400 bg-emerald-800/50 px-2 sm:px-3 lg:px-4 py-1 sm:py-1.5 lg:py-2 rounded-full border border-amber-500/30">
+                      <span className="text-[10px] sm:text-xs lg:text-sm text-amber-400 px-2 sm:px-3 lg:px-4 py-1 sm:py-1.5 lg:py-2 rounded-full border border-amber-500" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
                         {hadiths[currentHadithIndex].source}
                       </span>
                       
@@ -356,9 +365,13 @@ function App() {
                             key={index}
                             className={`rounded-full transition-all duration-500 ${
                               index === currentHadithIndex 
-                                ? 'w-4 sm:w-5 lg:w-6 xl:w-8 h-1.5 sm:h-2 bg-gradient-to-r from-amber-500 to-amber-600 shadow-md' 
-                                : 'w-1.5 sm:w-2 h-1.5 sm:h-2 bg-emerald-700 hover:bg-amber-600'
+                                ? 'w-4 sm:w-5 lg:w-6 h-2 shadow-md' 
+                                : 'w-2 h-2'
                             }`}
+                            style={{
+                              backgroundColor: index === currentHadithIndex ? 'rgb(245, 158, 11)' : 'rgba(6, 78, 59, 0.5)',
+                              boxShadow: index === currentHadithIndex ? '0 2px 4px rgba(0,0,0,0.3)' : 'none'
+                            }}
                             onClick={() => {
                               setCurrentHadithIndex(index);
                               setTimeLeft(15);
@@ -382,12 +395,12 @@ function App() {
         <div className="w-full lg:w-[30%] flex flex-col gap-3 lg:gap-4 h-auto lg:h-full">
           
           {/* Quick Info Card */}
-          <div className="bg-gradient-to-br from-emerald-900/80 to-emerald-950/80 backdrop-blur-xl rounded-xl lg:rounded-2xl shadow-2xl border border-amber-500/50 p-3 lg:p-4 xl:p-5 flex-shrink-0">
+          <div className="rounded-xl lg:rounded-2xl shadow-2xl border-2 border-amber-500 p-3 lg:p-4 xl:p-5 flex-shrink-0" style={{ backgroundColor: 'rgba(6, 78, 59, 0.85)' }}>
             <div className="flex items-center gap-2 lg:gap-3 mb-2 lg:mb-3 xl:mb-4">
-              <div className="w-6 h-6 lg:w-7 lg:h-7 bg-gradient-to-br from-amber-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
+              <div className="w-6 h-6 lg:w-7 lg:h-7 rounded-xl flex items-center justify-center shadow-lg" style={{ backgroundColor: 'rgb(245, 158, 11)' }}>
                 <span className="text-xs lg:text-sm text-white">📊</span>
               </div>
-              <h3 className="text-[10px] sm:text-xs lg:text-sm font-semibold text-amber-300 uppercase tracking-wider">
+              <h3 className="text-[10px] sm:text-xs lg:text-sm font-semibold text-amber-300 uppercase" style={{ letterSpacing: '0.1em' }}>
                 Informasi Masjid
               </h3>
             </div>
@@ -418,10 +431,10 @@ function App() {
           </div>
 
           {/* Finance Card */}
-          <div className="flex-1 bg-gradient-to-br from-emerald-900/80 to-emerald-950/80 backdrop-blur-xl rounded-xl lg:rounded-2xl shadow-2xl border border-amber-500/50 overflow-hidden flex flex-col">
+          <div className="flex-1 rounded-xl lg:rounded-2xl shadow-2xl border-2 border-amber-500 overflow-hidden flex flex-col" style={{ backgroundColor: 'rgba(6, 78, 59, 0.85)' }}>
             
             {/* Card Header */}
-            <div className="bg-gradient-to-r from-amber-600 to-amber-700 px-3 lg:px-4 xl:px-5 py-2 lg:py-3 xl:py-4 border-b border-amber-500/50 flex-shrink-0">
+            <div className="px-3 lg:px-4 xl:px-5 py-2 lg:py-3 xl:py-4 border-b-2 border-amber-500 flex-shrink-0" style={{ backgroundColor: 'rgb(217, 119, 6)' }}>
               <div className="flex items-center gap-2 lg:gap-3">
                 <div className="w-6 h-6 lg:w-7 lg:h-7 bg-amber-500 rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-xs lg:text-sm text-white">💰</span>
@@ -450,7 +463,7 @@ function App() {
               <div className="space-y-2.5 lg:space-y-3 mb-3 lg:mb-4">
                 {/* Latest Income */}
                 {loadingSaldo ? (
-                  <div className="bg-emerald-800/50 rounded-lg lg:rounded-xl p-2 lg:p-3 border border-amber-500/30">
+                  <div className="rounded-lg lg:rounded-xl p-2 lg:p-3 border border-amber-500" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-lg">📥</span>
@@ -463,7 +476,7 @@ function App() {
                     </div>
                   </div>
                 ) : getLatestIncome() ? (
-                  <div className="bg-gradient-to-br from-emerald-800/60 to-emerald-900/60 backdrop-blur-sm rounded-lg lg:rounded-xl p-2 lg:p-3 border border-emerald-500/40 shadow-lg">
+                  <div className="rounded-lg lg:rounded-xl p-2 lg:p-3 border border-emerald-500 shadow-lg" style={{ backgroundColor: 'rgba(6, 78, 59, 0.6)' }}>
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-1.5 sm:gap-2">
                         <span className="text-base sm:text-lg">📥</span>
@@ -487,7 +500,7 @@ function App() {
                     </div>
                   </div>
                 ) : (
-                  <div className="bg-emerald-800/50 rounded-lg lg:rounded-xl p-2 lg:p-3 border border-amber-500/30">
+                  <div className="rounded-lg lg:rounded-xl p-2 lg:p-3 border border-amber-500" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-lg">📥</span>
@@ -502,7 +515,7 @@ function App() {
 
                 {/* Latest Expense */}
                 {loadingSaldo ? (
-                  <div className="bg-emerald-800/50 rounded-lg lg:rounded-xl p-2 lg:p-3 border border-amber-500/30">
+                  <div className="rounded-lg lg:rounded-xl p-2 lg:p-3 border border-amber-500" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-lg">📤</span>
@@ -515,7 +528,7 @@ function App() {
                     </div>
                   </div>
                 ) : getLatestExpense() ? (
-                  <div className="bg-gradient-to-br from-red-900/40 to-red-950/40 backdrop-blur-sm rounded-lg lg:rounded-xl p-2 lg:p-3 border border-red-500/30 shadow-lg">
+                  <div className="rounded-lg lg:rounded-xl p-2 lg:p-3 border border-red-500 shadow-lg" style={{ backgroundColor: 'rgba(153, 27, 27, 0.4)' }}>
                     <div className="flex items-center justify-between mb-1.5">
                       <div className="flex items-center gap-1.5 sm:gap-2">
                         <span className="text-base sm:text-lg">📤</span>
@@ -539,7 +552,7 @@ function App() {
                     </div>
                   </div>
                 ) : (
-                  <div className="bg-emerald-800/50 rounded-lg lg:rounded-xl p-2 lg:p-3 border border-amber-500/30">
+                  <div className="rounded-lg lg:rounded-xl p-2 lg:p-3 border border-amber-500" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <span className="text-lg">📤</span>
@@ -558,14 +571,14 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="mt-1 relative bg-gradient-to-r from-emerald-950 to-emerald-900 border-t border-amber-500/50 py-2 lg:py-3 z-10">
+      <footer className="mt-1 relative border-t-2 border-amber-500 py-2 lg:py-3 z-10" style={{ backgroundColor: 'rgb(6, 78, 59)' }}>
         <div className="px-3 lg:px-6 xl:px-8 flex items-center justify-between text-[8px] sm:text-[9px] lg:text-xs">
           <p className="text-amber-300 truncate">
             © 2026 Masjid Al Ihsan Bakrie PT.CPM
           </p>
           <div className="flex items-center gap-1 lg:gap-2 flex-shrink-0">
             <span className="w-0.5 h-0.5 bg-amber-400 rounded-full"></span>
-            <p className="text-amber-400 font-bold tracking-wide text-[8px] sm:text-[9px] lg:text-xs">
+            <p className="text-amber-400 font-bold text-[8px] sm:text-[9px] lg:text-xs">
               Team ITE CPM
             </p>
             <span className="w-0.5 h-0.5 bg-amber-400 rounded-full"></span>
