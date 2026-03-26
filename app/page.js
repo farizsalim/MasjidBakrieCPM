@@ -146,16 +146,16 @@ function App() {
     }).format(angka);
   };
 
-  // Get latest income transaction
-  const getLatestIncome = () => {
+  // Get latest 3 income transactions
+  const getLatestIncomes = () => {
     const incomeTransactions = transactions.filter(t => t.type === 'income');
-    return incomeTransactions.length > 0 ? incomeTransactions[0] : null;
+    return incomeTransactions.slice(0, 3);
   };
 
-  // Get latest expense transaction
-  const getLatestExpense = () => {
+  // Get latest 3 expense transactions
+  const getLatestExpenses = () => {
     const expenseTransactions = transactions.filter(t => t.type === 'expense');
-    return expenseTransactions.length > 0 ? expenseTransactions[0] : null;
+    return expenseTransactions.slice(0, 3);
   };
 
   // Format date for display
@@ -236,35 +236,7 @@ function App() {
             </div>
           </div>
 
-          {/* Date and Time Card */}
-          <div className="bg-gradient-to-br from-emerald-900/90 to-emerald-950/90 backdrop-blur-2xl rounded-2xl lg:rounded-3xl px-4 lg:px-6 xl:px-8 py-2 lg:py-3 shadow-2xl border border-amber-500/50">
-            {isClient && currentTime ? (
-              <>
-                <div 
-                  className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-light text-amber-300 tabular-nums drop-shadow-lg"
-                  suppressHydrationWarning
-                >
-                  {formatTime(currentTime)}
-                </div>
-                <div 
-                  className="text-[9px] sm:text-xs lg:text-sm text-emerald-200 text-right font-light mt-0.5 lg:mt-1"
-                  suppressHydrationWarning
-                >
-                  {getCurrentDate()}
-                </div>
-              </>
-            ) : (
-              // Placeholder to prevent hydration mismatch
-              <>
-                <div className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-light text-amber-300 tabular-nums drop-shadow-lg">
-                  00:00:00
-                </div>
-                <div className="text-[9px] sm:text-xs lg:text-sm text-emerald-200 text-right font-light mt-0.5 lg:mt-1">
-                  Memuat...
-                </div>
-              </>
-            )}
-          </div>
+
         </div>
       </header>
 
@@ -276,18 +248,22 @@ function App() {
           {/* Section Label */}
           <div className="flex items-center gap-2 lg:gap-3 mb-2 lg:mb-3 flex-shrink-0">
             <div className="w-1 h-4 lg:h-5 bg-amber-500 rounded-full"></div>
-            <h2 className="text-[10px] sm:text-xs lg:text-sm font-medium tracking-[0.2em] text-amber-400 uppercase drop-shadow">
+            <h2 className="text-[10px] sm:text-xs lg:text-sm font-medium text-amber-400 uppercase" style={{ letterSpacing: '0.2em' }}>
               HADITS PILIHAN
             </h2>
-            <div className="flex-1 h-px bg-gradient-to-r from-amber-500 to-transparent"></div>
+            <div className="flex-1 h-px" style={{ background: 'linear-gradient(to right, rgb(245, 158, 11), transparent)' }}></div>
             
             {/* Progress Indicator */}
             <div className="flex items-center gap-1 lg:gap-2">
               <span className="text-[9px] sm:text-[10px] lg:text-xs text-amber-300">Next in</span>
-              <div className="w-12 sm:w-16 lg:w-20 h-1.5 bg-emerald-800 rounded-full overflow-hidden">
+              <div className="w-12 sm:w-16 lg:w-20 h-2 bg-emerald-800 rounded-full overflow-hidden">
                 <div 
-                  className="h-full bg-gradient-to-r from-amber-500 to-amber-600 rounded-full transition-all duration-1000"
-                  style={{ width: `${(timeLeft / 15) * 100}%` }}
+                  className="h-full rounded-full"
+                  style={{ 
+                    width: `${(timeLeft / 15) * 100}%`,
+                    background: 'linear-gradient(to right, rgb(245, 158, 11), rgb(217, 119, 6))',
+                    transition: 'width 1s linear'
+                  }}
                 ></div>
               </div>
               <span className="text-[9px] sm:text-[10px] lg:text-xs text-amber-400 font-mono font-medium">{timeLeft}s</span>
@@ -295,24 +271,24 @@ function App() {
           </div>
 
           {/* Hadits Card */}
-          <div className="flex-1 bg-gradient-to-br from-emerald-900/80 to-emerald-950/80 backdrop-blur-xl rounded-2xl lg:rounded-[2rem] shadow-2xl border border-amber-500/50 overflow-hidden min-h-0">
+          <div className="flex-1 rounded-2xl lg:rounded-[2rem] shadow-2xl border-2 border-amber-500 overflow-hidden min-h-0" style={{ backgroundColor: 'rgba(6, 78, 59, 0.85)' }}>
             
             <div className="h-full flex flex-col">
               {/* Category Badge */}
               <div className="px-4 sm:px-6 lg:px-8 pt-4 lg:pt-6 flex-shrink-0">
                 {hadiths[currentHadithIndex] ? (
-                  <span className="inline-block px-3 sm:px-4 lg:px-5 py-1 sm:py-1.5 lg:py-2 bg-gradient-to-r from-amber-500 to-amber-600 rounded-full text-amber-50 text-[10px] sm:text-xs lg:text-sm font-semibold tracking-wide shadow-xl border border-amber-400">
+                  <span className="inline-block px-3 sm:px-4 lg:px-5 py-1 sm:py-1.5 lg:py-2 rounded-full text-amber-50 text-[10px] sm:text-xs lg:text-sm font-semibold shadow-xl border-2 border-amber-400" style={{ backgroundColor: 'rgb(245, 158, 11)' }}>
                     {hadiths[currentHadithIndex].category.toUpperCase()}
                   </span>
                 ) : (
-                  <span className="inline-block px-3 sm:px-4 lg:px-5 py-1 sm:py-1.5 lg:py-2 bg-gradient-to-r from-amber-500 to-amber-600 rounded-full text-amber-50 text-[10px] sm:text-xs lg:text-sm font-semibold tracking-wide shadow-xl border border-amber-400">
+                  <span className="inline-block px-3 sm:px-4 lg:px-5 py-1 sm:py-1.5 lg:py-2 rounded-full text-amber-50 text-[10px] sm:text-xs lg:text-sm font-semibold shadow-xl border-2 border-amber-400" style={{ backgroundColor: 'rgb(245, 158, 11)' }}>
                     HADITS PILIHAN
                   </span>
                 )}
               </div>
 
               {/* Content */}
-              <div className="flex-1 px-4 sm:px-6 lg:px-8 py-4 lg:py-6 overflow-y-auto min-h-0 scrollbar-thin scrollbar-thumb-amber-500 scrollbar-track-emerald-800">
+              <div className="flex-1 px-4 sm:px-6 lg:px-8 py-4 lg:py-6 overflow-y-auto min-h-0">
                 {loadingHadiths || hadiths.length === 0 ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="text-center">
@@ -387,50 +363,14 @@ function App() {
           </div>
         </div>
 
-        {/* Right Column - Info & Finance */}
-        <div className="w-full lg:w-[30%] flex flex-col gap-3 lg:gap-4 h-auto lg:h-full">
+        {/* Right Column - Full Cash Display */}
+        <div className="w-full lg:w-[30%] flex flex-col h-full">
           
-          {/* Quick Info Card */}
-          <div className="rounded-xl lg:rounded-2xl shadow-2xl border-2 border-amber-500 p-3 lg:p-4 xl:p-5 flex-shrink-0" style={{ backgroundColor: 'rgba(6, 78, 59, 0.85)' }}>
-            <div className="flex items-center gap-2 lg:gap-3 mb-2 lg:mb-3 xl:mb-4">
-              <div className="w-6 h-6 lg:w-7 lg:h-7 rounded-xl flex items-center justify-center shadow-lg" style={{ backgroundColor: 'rgb(245, 158, 11)' }}>
-                <span className="text-xs lg:text-sm text-white">📊</span>
-              </div>
-              <h3 className="text-[10px] sm:text-xs lg:text-sm font-semibold text-amber-300 uppercase" style={{ letterSpacing: '0.1em' }}>
-                Informasi Masjid
-              </h3>
-            </div>
-            
-            <div className="space-y-2 lg:space-y-3">
-              <div className="flex justify-between items-center text-[10px] sm:text-xs lg:text-sm">
-                <span className="text-emerald-200">Jumlah Hadits</span>
-                <span className="text-amber-300 font-bold text-xs sm:text-sm lg:text-base">
-                  {loadingHadiths ? '-' : hadiths.length}
-                </span>
-              </div>
-              <div className="flex justify-between items-center text-[10px] sm:text-xs lg:text-sm">
-                <span className="text-emerald-200">Rotasi</span>
-                <span className="text-amber-300 font-bold text-xs sm:text-sm lg:text-base">15 detik</span>
-              </div>
-              <div className="flex justify-between items-center text-[10px] sm:text-xs lg:text-sm">
-                <span className="text-emerald-200">Status</span>
-                <span className="text-amber-300 font-bold text-xs sm:text-sm lg:text-base flex items-center gap-2">
-                  {loadingHadiths ? (
-                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-amber-400 rounded-full animate-pulse"></span>
-                  ) : (
-                    <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-emerald-400 rounded-full animate-pulse"></span>
-                  )}
-                  {loadingHadiths ? 'Memuat...' : 'Aktif'}
-                </span>
-              </div>
-            </div>
-          </div>
-
           {/* Finance Card */}
-          <div className="flex-1 rounded-xl lg:rounded-2xl shadow-2xl border-2 border-amber-500 overflow-hidden flex flex-col" style={{ backgroundColor: 'rgba(6, 78, 59, 0.85)' }}>
+          <div className="flex-1 rounded-xl lg:rounded-2xl shadow-2xl border-2 border-amber-500 overflow-hidden flex flex-col h-full" style={{ backgroundColor: 'rgba(6, 78, 59, 0.85)' }}>
             
             {/* Card Header */}
-            <div className="px-3 lg:px-4 xl:px-5 py-2 lg:py-3 xl:py-4 border-b-2 border-amber-500 flex-shrink-0" style={{ backgroundColor: 'rgb(217, 119, 6)' }}>
+            <div className="px-3 lg:px-4 xl:px-5 py-2 lg:py-3 xl:py-2 border-b-2 border-amber-500 flex-shrink-0" style={{ backgroundColor: 'rgb(217, 119, 6)' }}>
               <div className="flex items-center gap-2 lg:gap-3">
                 <div className="w-6 h-6 lg:w-7 lg:h-7 bg-amber-500 rounded-xl flex items-center justify-center shadow-lg">
                   <span className="text-xs lg:text-sm text-white">💰</span>
@@ -445,121 +385,114 @@ function App() {
             </div>
 
             {/* Card Content */}
-            <div className="flex-1 p-3 lg:p-4 xl:p-5 overflow-y-auto scrollbar-thin scrollbar-thumb-amber-500 scrollbar-track-emerald-800">
-              <div className="mb-3 lg:mb-4">
-                <p className="text-2xl sm:text-3xl lg:text-4xl xl:text-5xl font-bold text-amber-300 mb-1 lg:mb-2 drop-shadow-lg">
-                  {loadingSaldo ? 'Memuat...' : formatRupiah(saldoMasjid)}
-                </p>
-                <p className="text-xs sm:text-sm lg:text-base text-emerald-200 font-light">
-                  {loadingSaldo ? 'Mengambil data dari Firestore...' : 'Total saldo tersedia'}
-                </p>
+            <div className="flex-1 p-3 lg:p-4 xl:p-5 overflow-y-auto scrollbar-thin scrollbar-thumb-amber-500 scrollbar-track-emerald-800 flex flex-col">
+              {/* Latest Transactions Section */}
+              <div className="space-y-1.5 lg:space-y-2 mb-2 lg:mb-3 flex-1">
+                {/* Latest Incomes */}
+                <div className="space-y-1.5">
+                  <h4 className="text-[10px] sm:text-xs font-semibold text-emerald-300 uppercase tracking-wider mb-1">
+                    Pemasukan Terakhir
+                  </h4>
+                  {loadingSaldo ? (
+                    Array(3).fill(0).map((_, idx) => (
+                      <div key={idx} className="rounded-md p-1 border border-amber-500" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs sm:text-sm">📥</span>
+                            <p className="text-[9px] sm:text-[10px] text-emerald-200 font-light">Memuat...</p>
+                          </div>
+                        </div>
+                        <div className="mt-0.5 flex items-center justify-between">
+                          <p className="text-[10px] sm:text-xs text-amber-300 font-bold">-</p>
+                          <p className="text-[8px] sm:text-[9px] text-emerald-300">-</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : getLatestIncomes().length > 0 ? (
+                    getLatestIncomes().map((transaction, idx) => (
+                      <div key={idx} className="rounded-md p-1 border border-emerald-500 flex items-center justify-between" style={{ backgroundColor: 'rgba(6, 78, 59, 0.6)' }}>
+                        <div className="flex items-center gap-1 min-w-0">
+                          <span className="text-xs sm:text-sm flex-shrink-0">📥</span>
+                          <div className="min-w-0">
+                            <p className="text-[9px] sm:text-[15px] text-emerald-200 font-medium truncate leading-tight">
+                              {transaction.description || ''}
+                            </p>
+                            <p className="text-[10px] sm:text-xs text-emerald-400 font-bold">
+                              +{formatRupiah(transaction.amount || 0)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right flex-shrink-0">
+                          <p className="text-[7px] sm:text-[10px] text-emerald-300 leading-tight whitespace-nowrap">
+                            {formatTransactionDate(transaction)}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="rounded-md p-1 border border-amber-500 text-center" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
+                      <p className="text-[9px] sm:text-[10px] text-amber-300/60 italic">Belum ada pemasukan</p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Latest Expenses */}
+                <div className="space-y-1.5 pt-1.5 lg:pt-2 border-t border-amber-500/30">
+                  <h4 className="text-[10px] sm:text-xs font-semibold text-red-300 uppercase tracking-wider mb-1">
+                    Pengeluaran Terakhir
+                  </h4>
+                  {loadingSaldo ? (
+                    Array(3).fill(0).map((_, idx) => (
+                      <div key={idx} className="rounded-md p-1 border border-amber-500" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1">
+                            <span className="text-xs sm:text-sm">📤</span>
+                            <p className="text-[9px] sm:text-[10px] text-emerald-200 font-light">Memuat...</p>
+                          </div>
+                        </div>
+                        <div className="mt-0.5 flex items-center justify-between">
+                          <p className="text-[10px] sm:text-xs text-amber-300 font-bold">-</p>
+                          <p className="text-[8px] sm:text-[9px] text-emerald-300">-</p>
+                        </div>
+                      </div>
+                    ))
+                  ) : getLatestExpenses().length > 0 ? (
+                    getLatestExpenses().map((transaction, idx) => (
+                      <div key={idx} className="rounded-md p-1 border border-red-500 flex items-center justify-between" style={{ backgroundColor: 'rgba(153, 27, 27, 0.4)' }}>
+                        <div className="flex items-center gap-1 min-w-0">
+                          <span className="text-xs sm:text-sm flex-shrink-0">📤</span>
+                          <div className="min-w-0">
+                            <p className="text-[9px] sm:text-[15px] text-red-200 font-medium truncate leading-tight">
+                              {transaction.description || ''}
+                            </p>
+                            <p className="text-[10px] sm:text-xs text-red-400 font-bold">
+                              -{formatRupiah(transaction.amount || 0)}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="text-right flex-shrink-0">
+                          <p className="text-[7px] sm:text-[10px] text-red-300 leading-tight whitespace-nowrap">
+                            {formatTransactionDate(transaction)}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="rounded-md p-1 border border-amber-500 text-center" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
+                      <p className="text-[9px] sm:text-[10px] text-amber-300/60 italic">Belum ada pengeluaran</p>
+                    </div>
+                  )}
+                </div>
               </div>
 
-              {/* Latest Transactions Section */}
-              <div className="space-y-2.5 lg:space-y-3 mb-3 lg:mb-4">
-                {/* Latest Income */}
-                {loadingSaldo ? (
-                  <div className="rounded-lg lg:rounded-xl p-2 lg:p-3 border border-amber-500" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">📥</span>
-                        <p className="text-xs sm:text-sm lg:text-base text-emerald-200 font-light">Pemasukan Terakhir</p>
-                      </div>
-                    </div>
-                    <div className="mt-2 flex items-center justify-between">
-                      <p className="text-sm sm:text-base lg:text-lg text-amber-300 font-bold">Memuat...</p>
-                      <p className="text-[10px] sm:text-xs text-emerald-300">-</p>
-                    </div>
-                  </div>
-                ) : getLatestIncome() ? (
-                  <div className="rounded-lg lg:rounded-xl p-2 lg:p-3 border border-emerald-500 shadow-lg" style={{ backgroundColor: 'rgba(6, 78, 59, 0.6)' }}>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <div className="flex items-center gap-1.5 sm:gap-2">
-                        <span className="text-base sm:text-lg">📥</span>
-                        <p className="text-xs sm:text-sm lg:text-base text-emerald-200 font-medium">Pemasukan Terakhir</p>
-                      </div>
-                    </div>
-                    <div className="flex items-end justify-between">
-                      <div>
-                        <p className="text-xs sm:text-[10px] text-emerald-300 mb-0.5 truncate max-w-[120px] sm:max-w-none">
-                          {getLatestIncome()?.description || 'Tanpa judul'}
-                        </p>
-                        <p className="text-base sm:text-lg lg:text-xl text-emerald-400 font-bold">
-                          +{formatRupiah(getLatestIncome()?.amount || 0)}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] sm:text-xs text-emerald-300 leading-tight">
-                          {formatTransactionDate(getLatestIncome())}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="rounded-lg lg:rounded-xl p-2 lg:p-3 border border-amber-500" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">📥</span>
-                        <p className="text-xs sm:text-sm lg:text-base text-emerald-200 font-light">Pemasukan Terakhir</p>
-                      </div>
-                    </div>
-                    <div className="mt-2 text-center">
-                      <p className="text-sm sm:text-base text-amber-300/60 italic">Belum ada pemasukan</p>
-                    </div>
-                  </div>
-                )}
-
-                {/* Latest Expense */}
-                {loadingSaldo ? (
-                  <div className="rounded-lg lg:rounded-xl p-2 lg:p-3 border border-amber-500" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">📤</span>
-                        <p className="text-xs sm:text-sm lg:text-base text-emerald-200 font-light">Pengeluaran Terakhir</p>
-                      </div>
-                    </div>
-                    <div className="mt-2 flex items-center justify-between">
-                      <p className="text-sm sm:text-base lg:text-lg text-amber-300 font-bold">Memuat...</p>
-                      <p className="text-[10px] sm:text-xs text-emerald-300">-</p>
-                    </div>
-                  </div>
-                ) : getLatestExpense() ? (
-                  <div className="rounded-lg lg:rounded-xl p-2 lg:p-3 border border-red-500 shadow-lg" style={{ backgroundColor: 'rgba(153, 27, 27, 0.4)' }}>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <div className="flex items-center gap-1.5 sm:gap-2">
-                        <span className="text-base sm:text-lg">📤</span>
-                        <p className="text-xs sm:text-sm lg:text-base text-red-200 font-medium">Pengeluaran Terakhir</p>
-                      </div>
-                    </div>
-                    <div className="flex items-end justify-between">
-                      <div>
-                        <p className="text-xs sm:text-[10px] text-red-300 mb-0.5 truncate max-w-[120px] sm:max-w-none">
-                          {getLatestExpense()?.description || 'Tanpa judul'}
-                        </p>
-                        <p className="text-base sm:text-lg lg:text-xl text-red-400 font-bold">
-                          -{formatRupiah(getLatestExpense()?.amount || 0)}
-                        </p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[10px] sm:text-xs text-red-300 leading-tight">
-                          {formatTransactionDate(getLatestExpense())}
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="rounded-lg lg:rounded-xl p-2 lg:p-3 border border-amber-500" style={{ backgroundColor: 'rgba(6, 78, 59, 0.5)' }}>
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">📤</span>
-                        <p className="text-xs sm:text-sm lg:text-base text-emerald-200 font-light">Pengeluaran Terakhir</p>
-                      </div>
-                    </div>
-                    <div className="mt-2 text-center">
-                      <p className="text-sm sm:text-base text-amber-300/60 italic">Belum ada pengeluaran</p>
-                    </div>
-                  </div>
-                )}
+              {/* Total Saldo - Bottom Section */}
+              <div className="mt-auto pt-3 lg:pt-4 border-t-2 border-amber-500">
+                <p className="text-xs sm:text-sm lg:text-base text-emerald-200 font-light mb-1 lg:mb-2 text-center">
+                  {loadingSaldo ? 'Mengambil data dari Firestore...' : 'Total saldo tersedia'}
+                </p>
+                <p className="text-xl sm:text-2xl lg:text-3xl font-bold text-amber-300 text-center drop-shadow-lg">
+                  {loadingSaldo ? 'Memuat...' : formatRupiah(saldoMasjid)}
+                </p>
               </div>
             </div>
           </div>
