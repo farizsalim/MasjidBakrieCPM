@@ -371,8 +371,7 @@ export default function AdminDashboard() {
   const stats = {
     totalHadiths: hadiths.length,
     totalInfaq: transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0),
-    totalExpenses: transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0),
-    activeUsers: 24
+    totalExpenses: transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + (parseFloat(t.amount) || 0), 0)
   }
 
   const recentTransactions = transactions.slice(0, 5)
@@ -390,7 +389,6 @@ export default function AdminDashboard() {
     { id: 'dashboard', label: 'Dashboard', icon: '📊' },
     { id: 'hadiths', label: 'Manajemen Hadits', icon: '📖' },
     { id: 'finance', label: 'Keuangan', icon: '💰' },
-    { id: 'settings', label: 'Pengaturan', icon: '⚙️' },
   ]
 
   return (
@@ -488,7 +486,7 @@ export default function AdminDashboard() {
               </div>
 
               {/* Stats Cards */}
-              <div className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
                 <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-slate-700">
                   <div className="flex items-center justify-between mb-3 sm:mb-4">
                     <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-emerald-500 to-emerald-700 rounded-xl flex items-center justify-center">
@@ -521,17 +519,6 @@ export default function AdminDashboard() {
                   <h3 className="text-2xl sm:text-3xl font-bold text-white mb-1">{formatRupiah(stats.totalExpenses)}</h3>
                   <p className="text-xs sm:text-sm text-slate-400">Pengeluaran</p>
                 </div>
-
-                <div className="bg-slate-800/50 backdrop-blur-xl rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-slate-700">
-                  <div className="flex items-center justify-between mb-3 sm:mb-4">
-                    <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-700 rounded-xl flex items-center justify-center">
-                      <span className="text-xl sm:text-2xl">👥</span>
-                    </div>
-                    <span className="text-[10px] sm:text-xs text-emerald-400 font-medium whitespace-nowrap ml-2">+5</span>
-                  </div>
-                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-1">{stats.activeUsers}</h3>
-                  <p className="text-xs sm:text-sm text-slate-400">Jamaah</p>
-                </div>
               </div>
 
               {/* Recent Transactions */}
@@ -540,14 +527,52 @@ export default function AdminDashboard() {
                   <h3 className="text-base sm:text-lg font-semibold text-white">Transaksi Terakhir</h3>
                   <p className="text-xs sm:text-sm text-slate-400 mt-1">5 transaksi terakhir</p>
                 </div>
-                <div className="overflow-x-auto">
-                  <table className="w-full min-w-[500px]">
+                
+                {/* Mobile Card View */}
+                <div className="lg:hidden divide-y divide-slate-700">
+                  {recentTransactions.length === 0 ? (
+                    <div className="p-8 text-center text-slate-400 text-sm">
+                      📭 Belum ada transaksi
+                    </div>
+                  ) : (
+                    recentTransactions.map((transaction) => (
+                      <div key={transaction.id} className="p-4 hover:bg-slate-800/50 transition-colors">
+                        <div className="flex items-start justify-between gap-3 mb-2">
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-white break-words">{transaction.description}</p>
+                            <p className="text-[10px] text-slate-400 mt-0.5 truncate">
+                              {transaction.date || (transaction.createdAt?.toDate ? transaction.createdAt.toDate().toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : transaction.createdAt ? new Date(transaction.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : '-')}
+                            </p>
+                          </div>
+                          <span className={`inline-flex px-2 py-1 rounded-full text-[10px] font-medium whitespace-nowrap ${
+                            transaction.type === 'income'
+                              ? 'bg-emerald-500/20 text-emerald-400'
+                              : 'bg-red-500/20 text-red-400'
+                          }`}>
+                            {transaction.type === 'income' ? '📥' : '📤'}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <p className={`text-sm font-bold ${
+                            transaction.type === 'income' ? 'text-emerald-400' : 'text-red-400'
+                          }`}>
+                            {transaction.type === 'income' ? '+' : '-'}{formatRupiah(Math.abs(transaction.amount))}
+                          </p>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+                
+                {/* Desktop Table View */}
+                <div className="hidden lg:block overflow-x-auto">
+                  <table className="w-full">
                     <thead className="bg-slate-900/50">
                       <tr>
-                        <th className="px-3 sm:px-6 py-3 text-left text-[10px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider">Deskripsi</th>
-                        <th className="px-3 sm:px-6 py-3 text-left text-[10px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider">Tanggal</th>
-                        <th className="px-3 sm:px-6 py-3 text-left text-[10px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider">Tipe</th>
-                        <th className="px-3 sm:px-6 py-3 text-right text-[10px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider">Jumlah</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Deskripsi</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Tanggal</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider">Tipe</th>
+                        <th className="px-6 py-3 text-right text-xs font-medium text-slate-400 uppercase tracking-wider">Jumlah</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-slate-700">
@@ -560,12 +585,12 @@ export default function AdminDashboard() {
                       ) : (
                         recentTransactions.map((transaction) => (
                           <tr key={transaction.id} className="hover:bg-slate-800/50 transition-colors">
-                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white break-words max-w-[150px] sm:max-w-none">{transaction.description}</td>
-                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-slate-400 whitespace-nowrap">
+                            <td className="px-6 py-4 text-sm text-white break-words max-w-[200px]">{transaction.description}</td>
+                            <td className="px-6 py-4 text-sm text-slate-400 whitespace-nowrap">
                               {transaction.date || (transaction.createdAt?.toDate ? transaction.createdAt.toDate().toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : transaction.createdAt ? new Date(transaction.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : '-')}
                             </td>
-                            <td className="px-3 sm:px-6 py-3 sm:py-4">
-                              <span className={`inline-flex px-2 py-1 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium ${
+                            <td className="px-6 py-4">
+                              <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${
                                 transaction.type === 'income'
                                   ? 'bg-emerald-500/20 text-emerald-400'
                                   : 'bg-red-500/20 text-red-400'
@@ -573,7 +598,7 @@ export default function AdminDashboard() {
                                 {transaction.type === 'income' ? '📥 Pemasukan' : '📤 Pengeluaran'}
                               </span>
                             </td>
-                            <td className={`px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-semibold whitespace-nowrap ${
+                            <td className={`px-6 py-4 text-right text-sm font-semibold whitespace-nowrap ${
                               transaction.type === 'income' ? 'text-emerald-400' : 'text-red-400'
                             }`}>
                               {transaction.type === 'income' ? '+' : '-'}{formatRupiah(Math.abs(transaction.amount))}
@@ -892,151 +917,137 @@ export default function AdminDashboard() {
                     <p className="text-slate-400 text-sm sm:text-base">Belum ada transaksi</p>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full min-w-[700px]">
-                      <thead className="bg-slate-900/50 sticky top-0">
-                        <tr>
-                          <th className="px-3 sm:px-6 py-3 text-left text-[10px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap">Deskripsi</th>
-                          <th className="px-3 sm:px-6 py-3 text-left text-[10px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap hidden lg:table-cell">Keterangan</th>
-                          <th className="px-3 sm:px-6 py-3 text-left text-[10px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap">Tanggal</th>
-                          <th className="px-3 sm:px-6 py-3 text-left text-[10px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap hidden sm:table-cell">Waktu</th>
-                          <th className="px-3 sm:px-6 py-3 text-left text-[10px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap">Tipe</th>
-                          <th className="px-3 sm:px-6 py-3 text-right text-[10px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap">Jumlah</th>
-                          <th className="px-3 sm:px-6 py-3 text-center text-[10px] sm:text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap">Aksi</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-slate-700">
-                        {transactions.map((transaction) => (
-                          <tr key={transaction.id} className="hover:bg-slate-800/50 transition-colors">
-                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-white font-medium break-words max-w-[150px] sm:max-w-none align-top">
-                              <div className="font-medium">{transaction.description}</div>
-                              {transaction.notes && (
-                                <div className="text-slate-400 text-[10px] sm:hidden mt-0.5 truncate">{transaction.notes}</div>
-                              )}
-                            </td>
-                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-slate-400 align-top hidden md:table-cell">
-                              <div className="max-w-[200px] truncate">{transaction.notes || '-'}</div>
-                            </td>
-                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-slate-400 whitespace-nowrap align-top">
-                              {transaction.date || (transaction.createdAt?.toDate ? transaction.createdAt.toDate().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : transaction.createdAt ? new Date(transaction.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '-')}
-                            </td>
-                            <td className="px-3 sm:px-6 py-3 sm:py-4 text-xs sm:text-sm text-slate-400 whitespace-nowrap align-top hidden sm:table-cell">
-                              {transaction.time || (transaction.createdAt?.toDate ? transaction.createdAt.toDate().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : transaction.createdAt ? new Date(transaction.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '-')}
-                            </td>
-                            <td className="px-3 sm:px-6 py-3 sm:py-4 align-top">
-                              <span className={`inline-flex px-2 py-1 sm:px-2.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium ${
-                                transaction.type === 'income'
-                                  ? 'bg-emerald-500/20 text-emerald-400'
-                                  : 'bg-red-500/20 text-red-400'
-                              }`}>
-                                {transaction.type === 'income' ? '📥' : '📤'} <span className="hidden xs:inline ml-1">{transaction.type === 'income' ? 'Pemasukan' : 'Pengeluaran'}</span>
-                              </span>
-                            </td>
-                            <td className={`px-3 sm:px-6 py-3 sm:py-4 text-right text-xs sm:text-sm font-bold whitespace-nowrap align-top ${
+                  <>
+                    {/* Mobile Card View */}
+                    <div className="lg:hidden divide-y divide-slate-700">
+                      {transactions.map((transaction) => (
+                        <div key={transaction.id} className="p-4 hover:bg-slate-800/50 transition-colors">
+                          <div className="flex items-start justify-between gap-3 mb-2">
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium text-white break-words">{transaction.description}</p>
+                              <p className="text-[10px] text-slate-400 mt-1 truncate">{transaction.notes || '-'}</p>
+                              <p className="text-[10px] text-slate-500 mt-1">
+                                {transaction.date || (transaction.createdAt?.toDate ? transaction.createdAt.toDate().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : transaction.createdAt ? new Date(transaction.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '-')}
+                                {' • '}
+                                {transaction.time || (transaction.createdAt?.toDate ? transaction.createdAt.toDate().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : transaction.createdAt ? new Date(transaction.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '-')}
+                              </p>
+                            </div>
+                            <span className={`inline-flex px-2 py-1 rounded-full text-[10px] font-medium whitespace-nowrap ${
+                              transaction.type === 'income'
+                                ? 'bg-emerald-500/20 text-emerald-400'
+                                : 'bg-red-500/20 text-red-400'
+                            }`}>
+                              {transaction.type === 'income' ? '📥' : '📤'}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between mt-3 pt-3 border-t border-slate-700/50">
+                            <p className={`text-lg font-bold ${
                               transaction.type === 'income' ? 'text-emerald-400' : 'text-red-400'
                             }`}>
                               {transaction.type === 'income' ? '+' : '-'}{formatRupiah(transaction.amount)}
-                            </td>
-                            <td className="px-3 sm:px-6 py-3 sm:py-4 align-top">
-                              <div className="flex items-center justify-center gap-1.5">
-                                <button
-                                  onClick={() => handleEditClick(transaction)}
-                                  className="p-1.5 sm:p-2 text-blue-400 hover:bg-blue-500/20 rounded-lg transition-colors"
-                                  title="Edit"
-                                  aria-label="Edit transaction"
-                                >
-                                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                                  </svg>
-                                </button>
-                                <button
-                                  onClick={() => handleDeleteTransaction(transaction.id)}
-                                  className="p-1.5 sm:p-2 text-red-400 hover:bg-red-500/20 rounded-lg transition-colors"
-                                  title="Hapus"
-                                  aria-label="Delete transaction"
-                                >
-                                  <svg className="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                                  </svg>
-                                </button>
-                              </div>
-                            </td>
+                            </p>
+                            <div className="flex items-center gap-2">
+                              <button
+                                onClick={() => handleEditClick(transaction)}
+                                className="p-2 text-blue-400 hover:bg-blue-500/20 rounded-lg transition-colors"
+                                title="Edit"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                </svg>
+                              </button>
+                              <button
+                                onClick={() => handleDeleteTransaction(transaction.id)}
+                                className="p-2 text-red-400 hover:bg-red-500/20 rounded-lg transition-colors"
+                                title="Hapus"
+                              >
+                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Desktop Table View */}
+                    <div className="hidden lg:block overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-slate-900/50 sticky top-0">
+                          <tr>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap">Deskripsi</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap hidden md:table-cell">Keterangan</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap">Tanggal</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap hidden lg:table-cell">Waktu</th>
+                            <th className="px-6 py-3 text-left text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap">Tipe</th>
+                            <th className="px-6 py-3 text-right text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap">Jumlah</th>
+                            <th className="px-6 py-3 text-center text-xs font-medium text-slate-400 uppercase tracking-wider whitespace-nowrap">Aksi</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody className="divide-y divide-slate-700">
+                          {transactions.map((transaction) => (
+                            <tr key={transaction.id} className="hover:bg-slate-800/50 transition-colors">
+                              <td className="px-6 py-4 text-sm text-white font-medium break-words max-w-[200px] align-top">
+                                <div className="font-medium">{transaction.description}</div>
+                                {transaction.notes && (
+                                  <div className="text-slate-400 text-xs mt-1 truncate max-w-[180px]">{transaction.notes}</div>
+                                )}
+                              </td>
+                              <td className="px-6 py-4 text-sm text-slate-400 align-top hidden md:table-cell">
+                                <div className="max-w-[200px] truncate">{transaction.notes || '-'}</div>
+                              </td>
+                              <td className="px-6 py-4 text-sm text-slate-400 whitespace-nowrap align-top">
+                                {transaction.date || (transaction.createdAt?.toDate ? transaction.createdAt.toDate().toLocaleDateString('id-ID', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' }) : transaction.createdAt ? new Date(transaction.createdAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '-')}
+                              </td>
+                              <td className="px-6 py-4 text-sm text-slate-400 whitespace-nowrap align-top hidden lg:table-cell">
+                                {transaction.time || (transaction.createdAt?.toDate ? transaction.createdAt.toDate().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : transaction.createdAt ? new Date(transaction.createdAt).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : '-')}
+                              </td>
+                              <td className="px-6 py-4 align-top">
+                                <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${
+                                  transaction.type === 'income'
+                                    ? 'bg-emerald-500/20 text-emerald-400'
+                                    : 'bg-red-500/20 text-red-400'
+                                }`}>
+                                  {transaction.type === 'income' ? '📥 Pemasukan' : '📤 Pengeluaran'}
+                                </span>
+                              </td>
+                              <td className={`px-6 py-4 text-right text-sm font-bold whitespace-nowrap align-top ${
+                                transaction.type === 'income' ? 'text-emerald-400' : 'text-red-400'
+                              }`}>
+                                {transaction.type === 'income' ? '+' : '-'}{formatRupiah(transaction.amount)}
+                              </td>
+                              <td className="px-6 py-4 align-top">
+                                <div className="flex items-center justify-center gap-1.5">
+                                  <button
+                                    onClick={() => handleEditClick(transaction)}
+                                    className="p-2 text-blue-400 hover:bg-blue-500/20 rounded-lg transition-colors"
+                                    title="Edit"
+                                    aria-label="Edit transaction"
+                                  >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                                    </svg>
+                                  </button>
+                                  <button
+                                    onClick={() => handleDeleteTransaction(transaction.id)}
+                                    className="p-2 text-red-400 hover:bg-red-500/20 rounded-lg transition-colors"
+                                    title="Hapus"
+                                    aria-label="Delete transaction"
+                                  >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
                 )}
-              </div>
-            </div>
-          )}
-
-          {activeTab === 'settings' && (
-            <div className="space-y-6">
-              <div>
-                <h2 className="text-2xl lg:text-3xl font-bold text-white mb-2">Pengaturan</h2>
-                <p className="text-slate-400">Konfigurasi sistem dan preferensi</p>
-              </div>
-
-              <div className="bg-slate-800/50 backdrop-blur-xl rounded-2xl border border-slate-700 divide-y divide-slate-700">
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-white mb-4">Informasi Masjid</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm text-slate-400 mb-2">Nama Masjid</label>
-                      <input type="text" defaultValue="MASJID AL IHSAN BAKRIE PT.CPM" className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-emerald-500" />
-                    </div>
-                    <div>
-                      <label className="block text-sm text-slate-400 mb-2">Tagline</label>
-                      <input type="text" defaultValue="BERKAH • ISTIQOMAH • BERDAYA" className="w-full px-4 py-3 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-emerald-500" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-white mb-4">Pengaturan Tampilan</h3>
-                  <div className="space-y-4">
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-white font-medium">Durasi Rotasi Hadits</p>
-                        <p className="text-sm text-slate-400 mt-1">Waktu tampilan setiap hadits</p>
-                      </div>
-                      <select className="px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-white focus:outline-none focus:border-emerald-500">
-                        <option value="10">10 detik</option>
-                        <option value="15" selected>15 detik</option>
-                        <option value="20">20 detik</option>
-                        <option value="30">30 detik</option>
-                      </select>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <p className="text-white font-medium">Mode Gelap</p>
-                        <p className="text-sm text-slate-400 mt-1">Tampilan tema gelap untuk admin panel</p>
-                      </div>
-                      <button className="relative w-12 h-6 bg-emerald-600 rounded-full transition-colors">
-                        <span className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full transition-transform"></span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <h3 className="text-lg font-semibold text-white mb-4">Backup & Restore</h3>
-                  <div className="flex flex-wrap gap-3">
-                    <button className="px-4 py-2 bg-slate-700 text-white rounded-xl hover:bg-slate-600 transition-colors">
-                      📥 Download Backup
-                    </button>
-                    <button className="px-4 py-2 bg-slate-700 text-white rounded-xl hover:bg-slate-600 transition-colors">
-                      📤 Upload Backup
-                    </button>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <button className="px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl font-medium hover:shadow-lg hover:shadow-emerald-500/30 transition-all">
-                    Simpan Perubahan
-                  </button>
-                </div>
               </div>
             </div>
           )}
