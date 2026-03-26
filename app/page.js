@@ -236,7 +236,19 @@ function App() {
             </div>
           </div>
 
-
+          {/* Clock and Date Card */}
+          <div className="hidden sm:flex flex-col items-end">
+            <div className="rounded-xl lg:rounded-lg shadow-lg border border-amber-500/50 overflow-hidden" style={{ backgroundColor: 'rgba(6, 78, 59, 0.6)' }}>
+              <div className="px-3 lg:px-4 py-2 lg:py-2 text-right">
+                <p className="text-lg lg:text-xl font-mono font-bold text-amber-400 drop-shadow-lg">
+                  {isClient ? formatTime(currentTime) : '00:00:00'}
+                </p>
+                <p className="text-[10px] sm:text-xs text-emerald-300 truncate max-w-[180px] lg:max-w-[220px] mt-0.5">
+                  {isClient ? getCurrentDate() : '-'}
+                </p>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
